@@ -1,0 +1,27 @@
+version: "2"
+services:
+  isaac-tickets:
+    container_name: isaac-tickets
+    build: .
+    image_name: osticket-isaac
+    ports:
+      - "8088:80"
+    link:
+      - "isaac-tickets-db:db-server"
+
+  isaac-tickets-db:
+    container_name: isaac-tickets-db
+    image: mysql:5.7.14
+    volumes:
+      - "/local/data/mysql-tickets:/var/lib/mysql:rw"
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: yes
+      MYSQL_USER: osticket
+      MYSQL_PASSWORD: osticket
+      MYSQL_DATABASE: osticket
+
+
+network:
+  default:
+    external:
+      name: isaac
