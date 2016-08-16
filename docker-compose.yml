@@ -3,8 +3,6 @@ services:
   isaac-tickets:
     container_name: isaac-tickets
     build: .
-    ports:
-      - "8088:80"
     links:
       - "isaac-tickets-db:db-server"
 
