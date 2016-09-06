@@ -5,10 +5,12 @@ services:
     build: .
     links:
       - "isaac-tickets-db:db-server"
+    restart: always
 
   isaac-tickets-db:
     container_name: isaac-tickets-db
     image: mysql:5.7.14
+    restart: always
     volumes:
       - "/local/data/mysql-tickets:/var/lib/mysql:rw"
     environment:
