@@ -6,6 +6,9 @@ services:
     links:
       - "isaac-tickets-db:db-server"
     restart: always
+    volumes:
+      - "./osTicket-v1.10/upload:/var/www/html:ro"
+      - "./php.ini:/usr/local/etc/php/php.ini"
 
   isaac-tickets-db:
     container_name: isaac-tickets-db
