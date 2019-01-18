@@ -15,13 +15,17 @@ class DynamicFormsAjaxAPI extends AjaxController {
     }
 
     function getFormsForHelpTopic($topic_id, $client=false) {
+        if (!$_SERVER['HTTP_REFERER'])
+            Http::response(403, 'Forbidden.');
+
         if (!($topic = Topic::lookup($topic_id)))
             Http::response(404, 'No such help topic');
 
         if ($_GET || isset($_SESSION[':form-data'])) {
             if (!is_array($_SESSION[':form-data']))
                 $_SESSION[':form-data'] = array();
-            $_SESSION[':form-data'] = array_merge($_SESSION[':form-data'], $_GET);
+            $_SESSION[':form-data'] = array_merge($_SESSION[':form-data'],
+                    Format::htmlchars($_GET));
         }
 
         foreach ($topic->getForms() as $form) {
@@ -172,7 +176,7 @@ class DynamicFormsAjaxAPI extends AjaxController {
                 $item->update([
                     'name' =>   $basic['name'],
                     'value' =>  $basic['value'],
-                    'extra' =>  $basic['extra'],
+                    'abbrev' =>  $basic['extra'],
                 ]);
             }
         }
@@ -380,9 +384,15 @@ class DynamicFormsAjaxAPI extends AjaxController {
     }
 
     function attach() {
+        global $thisstaff;
+
+        $config = DynamicFormField::objects()
+            ->filter(array('type__contains'=>'thread'))
+            ->first()->getConfiguration();
         $field = new FileUploadField();
+        $field->_config = $config;
         return JsonDataEncoder::encode(
-            array('id'=>$field->ajaxUpload())
+            array('id'=>$field->ajaxUpload($thisstaff ? true : false))
         );
     }
 

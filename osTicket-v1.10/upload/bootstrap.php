@@ -314,8 +314,8 @@ define('CLI_DIR', INCLUDE_DIR.'cli/');
 /*############## Do NOT monkey with anything else beyond this point UNLESS you really know what you are doing ##############*/
 
 #Current version && schema signature (Changes from version to version)
-define('THIS_VERSION', 'v1.10'); // Set by installer
-define('GIT_VERSION', '901e5ea'); // Set by installer
+define('THIS_VERSION', 'v1.10.4'); // Set by installer
+define('GIT_VERSION', '035fd0a'); // Set by installer
 define('MAJOR_VERSION', '1.10');
 //Path separator
 if(!defined('PATH_SEPARATOR')){

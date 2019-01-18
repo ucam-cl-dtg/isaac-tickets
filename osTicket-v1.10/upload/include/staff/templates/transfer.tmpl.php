@@ -40,7 +40,7 @@ $action = $info[':action'] ?: ('#');
             <tr><td colspan=2>
              <?php
              $options = array('template' => 'simple', 'form_id' => 'transfer');
-             $form->render(true, false, $options);
+             $form->render($options);
              ?>
             </td> </tr>
         </tbody>

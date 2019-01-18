@@ -419,6 +419,11 @@ class OsticketConfig extends Config {
         return $this->get('enable_avatars');
     }
 
+    function isTicketLockEnabled() {
+        return (($this->getTicketLockMode() != Lock::MODE_DISABLED)
+                && $this->getLockTime());
+    }
+
     function getClientTimeout() {
         return $this->getClientSessionTimeout();
     }
@@ -1089,7 +1094,7 @@ class OsticketConfig extends Config {
                 return $this->updateKBSettings($vars, $errors);
                 break;
             default:
-                $errors['err']=__('Unknown setting option. Get technical support.');
+                $errors['err']=sprintf('%s - %s', __('Unknown setting option'), __('Get technical help!'));
         }
 
         return false;
@@ -1109,6 +1114,8 @@ class OsticketConfig extends Config {
         $f['daydatetime_format']=array('type'=>'string',   'required'=>1, 'error'=>__('Day, Datetime format is required'));
         $f['default_timezone']=array('type'=>'string',   'required'=>1, 'error'=>__('Default Timezone is required'));
         $f['system_language']=array('type'=>'string',   'required'=>1, 'error'=>__('A primary system language is required'));
+
+        $vars = Format::htmlchars($vars, true);
 
         // Make sure the selected backend is valid
         $storagebk = null;

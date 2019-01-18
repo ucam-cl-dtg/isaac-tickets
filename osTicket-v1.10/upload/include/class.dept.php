@@ -388,6 +388,11 @@ implements TemplateVariable {
                 ->filter(array('dept_id' => $id))
                 ->update(array('dept_id' => $cfg->getDefaultDeptId()));
 
+            // Move tasks
+            Task::objects()
+                ->filter(array('dept_id' => $id))
+                ->update(array('dept_id' => $cfg->getDefaultDeptId()));
+
             //Move Dept members: This should never happen..since delete should be issued only to empty Depts...but check it anyways
             Staff::objects()
                 ->filter(array('dept_id' => $id))
@@ -599,7 +604,8 @@ implements TemplateVariable {
 
         $id = $this->id;
         if ($id && $id != $vars['id'])
-            $errors['err']=__('Missing or invalid Dept ID (internal error).');
+            $errors['err']=__('Missing or invalid Dept ID.')
+                .' '.__('Internal error occurred');
 
         if (!$vars['name']) {
             $errors['name']=__('Name required');
@@ -613,6 +619,21 @@ implements TemplateVariable {
 
         if ($vars['pid'] && !($p = static::lookup($vars['pid'])))
             $errors['pid'] = __('Department selection is required');
+
+        if ($vars['sla_id'] && !SLA::lookup($vars['sla_id']))
+            $errors['sla_id'] = __('Invalid SLA');
+
+        if ($vars['manager_id'] && !Staff::lookup($vars['manager_id']))
+            $errors['manager_id'] = __('Unknown Staff');
+
+        if ($vars['email_id'] && !Email::lookup($vars['email_id']))
+            $errors['email_id'] = __('Unknown System Email');
+
+        if ($vars['tpl_id'] && !EmailTemplateGroup::lookup($vars['tpl_id']))
+            $errors['tpl_id'] = __('Unknown Template Set');
+
+        if ($vars['autoresp_email_id'] && !Email::lookup($vars['autoresp_email_id']))
+            $errors['autoresp_email_id'] = __('Unkown System Email');
 
         // Format access update as [array(dept_id, role_id, alerts?)]
         $access = array();
@@ -628,17 +649,17 @@ implements TemplateVariable {
             return false;
 
         $this->pid = $vars['pid'] ?: null;
-        $this->ispublic = isset($vars['ispublic'])?$vars['ispublic']:0;
-        $this->email_id = isset($vars['email_id'])?$vars['email_id']:0;
-        $this->tpl_id = isset($vars['tpl_id'])?$vars['tpl_id']:0;
-        $this->sla_id = isset($vars['sla_id'])?$vars['sla_id']:0;
-        $this->autoresp_email_id = isset($vars['autoresp_email_id'])?$vars['autoresp_email_id']:0;
+        $this->ispublic = isset($vars['ispublic']) ? (int) $vars['ispublic'] : 0;
+        $this->email_id = isset($vars['email_id']) ? (int) $vars['email_id'] : 0;
+        $this->tpl_id = isset($vars['tpl_id']) ? (int) $vars['tpl_id'] : 0;
+        $this->sla_id = isset($vars['sla_id']) ? (int) $vars['sla_id'] : 0;
+        $this->autoresp_email_id = isset($vars['autoresp_email_id']) ? (int) $vars['autoresp_email_id'] : 0;
         $this->manager_id = $vars['manager_id'] ?: 0;
         $this->name = Format::striptags($vars['name']);
         $this->signature = Format::sanitize($vars['signature']);
         $this->group_membership = $vars['group_membership'];
-        $this->ticket_auto_response = isset($vars['ticket_auto_response'])?$vars['ticket_auto_response']:1;
-        $this->message_auto_response = isset($vars['message_auto_response'])?$vars['message_auto_response']:1;
+        $this->ticket_auto_response = isset($vars['ticket_auto_response']) ? (int) $vars['ticket_auto_response'] : 1;
+        $this->message_auto_response = isset($vars['message_auto_response']) ? (int) $vars['message_auto_response'] : 1;
         $this->flags = 0;
         $this->setFlag(self::FLAG_ASSIGN_MEMBERS_ONLY, isset($vars['assign_members_only']));
         $this->setFlag(self::FLAG_DISABLE_AUTO_CLAIM, isset($vars['disable_auto_claim']));
