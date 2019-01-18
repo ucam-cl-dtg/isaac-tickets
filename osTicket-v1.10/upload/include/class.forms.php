@@ -3878,7 +3878,7 @@ class FileUploadWidget extends Widget {
         ),
     );
 
-    function render($options) {
+    function render($staff = true, $title = false, $options = Array()) {
         $config = $this->field->getConfiguration();
         $name = $this->field->getFormName();
         $id = substr(md5(spl_object_hash($this)), 10);
@@ -4329,7 +4329,7 @@ class AssignmentForm extends Form {
         return !$this->errors();
     }
 
-    function render($options) {
+    function render($staff = true, $title = false, $options = Array()) {
 
         switch(strtolower($options['template'])) {
         case 'simple':
@@ -4459,7 +4459,7 @@ class TransferForm extends Form {
         return !$this->errors();
     }
 
-    function render($options) {
+    function render($staff = true, $title = false, $options = Array()) {
 
         switch(strtolower($options['template'])) {
         case 'simple':
