@@ -30,7 +30,7 @@ services:
       - "isaac-cs-tickets-db:db-server"
     restart: always
     volumes:
-      - "./osTicket-v1.10/upload:/var/www/html:rw"
+      - "./osTicket-v1.10/upload:/var/www/html:ro"
       - "./php.ini:/usr/local/etc/php/php.ini"
 
   isaac-cs-tickets-db:
