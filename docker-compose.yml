@@ -22,6 +22,28 @@ services:
       MYSQL_PASSWORD: osticket
       MYSQL_DATABASE: osticket
 
+# Isaac CS:
+  isaac-cs-tickets:
+    container_name: isaac-cs-tickets
+    build: .
+    links:
+      - "isaac-cs-tickets-db:db-server"
+    restart: always
+    volumes:
+      - "./osTicket-v1.10/upload:/var/www/html:rw"
+      - "./php.ini:/usr/local/etc/php/php.ini"
+
+  isaac-cs-tickets-db:
+    container_name: isaac-cs-tickets-db
+    image: mysql:5.7
+    restart: always
+    volumes:
+      - "/local/data/isaac-cs-tickets:/var/lib/mysql:rw"
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_USER: osticket
+      MYSQL_PASSWORD: osticket
+      MYSQL_DATABASE: osticket
 
 networks:
   default:
