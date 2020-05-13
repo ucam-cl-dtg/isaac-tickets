@@ -27,7 +27,7 @@ $info = Format::htmlchars(($errors && $_POST)?$_POST:$info);
 <tbody>
 <?php
     $cf = $user_form ?: UserForm::getInstance();
-    $cf->render(false, false, array('mode' => 'create'));
+    $cf->render(array('staff' => false, 'mode' => 'create'));
 ?>
 <tr>
     <td colspan="2">
@@ -92,14 +92,14 @@ $info = Format::htmlchars(($errors && $_POST)?$_POST:$info);
 </table>
 <hr>
 <p style="text-align: center;">
-    <input type="submit" value="Register"/>
-    <input type="button" value="Cancel" onclick="javascript:
+    <input type="submit" value="<?php echo __('Register'); ?>"/>
+    <input type="button" value="<?php echo __('Cancel'); ?>" onclick="javascript:
         window.location.href='index.php';"/>
 </p>
 </form>
 <?php if (!isset($info['timezone'])) { ?>
 <!-- Auto detect client's timezone where possible -->
-<script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jstz.min.js?035fd0a"></script>
+<script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jstz.min.js?cba6035"></script>
 <script type="text/javascript">
 $(function() {
     var zone = jstz.determine();
