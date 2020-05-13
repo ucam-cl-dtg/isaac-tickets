@@ -1,21 +1,21 @@
 version: "2"
 services:
-  isaac-tickets:
-    container_name: isaac-tickets
+  isaac-phy-tickets:
+    container_name: isaac-phy-tickets
     build: .
     links:
-      - "isaac-tickets-db:db-server"
+      - "isaac-phy-tickets-db:db-server"
     restart: always
     volumes:
       - "./osTicket/upload:/var/www/html:ro"
       - "./php.ini:/usr/local/etc/php/php.ini"
 
-  isaac-tickets-db:
-    container_name: isaac-tickets-db
+  isaac-phy-tickets-db:
+    container_name: isaac-phy-tickets-db
     image: mysql:5.7.14
     restart: always
     volumes:
-      - "/local/data/mysql-tickets:/var/lib/mysql:rw"
+      - "/isaac/tickets-phy:/var/lib/mysql:rw"
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_USER: osticket
@@ -38,7 +38,7 @@ services:
     image: mysql:5.7
     restart: always
     volumes:
-      - "/local/data/isaac-cs-tickets:/var/lib/mysql:rw"
+      - "/isaac/tickets-cs:/var/lib/mysql:rw"
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_USER: osticket
